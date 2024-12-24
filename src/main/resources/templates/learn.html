@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Library</title>
+    <script th:src="@{/webjars/jquery/5.3.3/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet"
+          th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" />
+    <link th:href="@{/styles/cssandjs/styles.css}" rel="stylesheet" />
+</head>
+<body>
+    <div th:replace="fragments/header.html :: header"></div>
+    <div id="body">
+        <div class="form-group mb-2">
+            <input type="text" readonly class="form-control-plaintext" id="definition" value="Definition">
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <input type="term" class="form-control" id="term" placeholder="Term">
+        </div>
+        <button type="submit" id="submit" class="btn btn-primary mb-2">Confirm</button>
+    </div>
+<script th:inline="javascript">
+    var learnEntity = [[${learn}]];
+    const COUNT_OF_SUCCESSFUL_INPUTS = 2;
+    var terms = learnEntity.terms;
+
+    function validateAnswer(input, expected) {
+        return input.toLowerCase().localeCompare(expected.toLowerCase()) === 0 ? true : false;
+    }
+
+    function update(data) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+        }
+        xhr.open('post', '/set/106/learn/52/update', true);
+        xhr.setRequestHeader('Access-Control-Allow-Origin', 'application/x-www-form-urlencoded; charset=UTF-8');
+        xhr.send(data);
+    }
+
+    function showNewTerm() {
+        if (Object.keys(learnEntity.data).length === 0) {
+            alert("Success!!!");
+            return;
+        }
+        var randomTermId = Math.round(Math.random() * (terms.length - 1)); // it is not id of entity, it is position in array
+        var term = terms[randomTermId];
+        var termEntityId = term.id;
+        if (learnEntity.data[termEntityId] === undefined) {
+            showNewTerm();
+        } else {
+            document.getElementById("definition").value = term.definition;
+            document.getElementById("submit").onclick = function() {
+                let input = document.getElementById("term").value;
+                if (validateAnswer(input, term.term)) {
+                    learnEntity.data[termEntityId]++;
+                    if (COUNT_OF_SUCCESSFUL_INPUTS === learnEntity.data[termEntityId]) {
+                        delete learnEntity.data[termEntityId];
+                    }
+                    showNewTerm();
+                } else {
+                    learnEntity.data[termEntityId] = 0;
+                }
+                update(JSON.stringify(learnEntity.data));
+            }
+        }
+    }
+
+    showNewTerm();
+</script>
+</body>
+</html>

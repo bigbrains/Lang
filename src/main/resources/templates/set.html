@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Library</title>
+    <script th:src="@{/webjars/jquery/5.3.3/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet"
+          th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" />
+    <link th:href="@{/styles/cssandjs/styles.css}" rel="stylesheet" />
+</head>
+<body>
+<div th:replace="fragments/header.html :: header"></div>
+<div id="body">
+    <a th:href="@{/set/{id}/learn(id=${set.id})}"><button id="learn" type="button" class="btn btn-success">Learn</button></a>
+    <div class="accordion" id="accordionExample">
+        <div th:each="term: ${terms}" class="accordion-item">
+            <h2 class="accordion-header">
+                <button th:text="${term.definition}" class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <strong th:text="${term.term}"></strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+</script>
+</body>
+</html>

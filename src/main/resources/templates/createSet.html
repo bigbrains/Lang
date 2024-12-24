@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script th:src="@{/webjars/jquery/5.3.3/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.min.js}"></script>
+    <title>WebJars Demo</title>
+    <link rel="stylesheet"
+          th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" />
+    <link th:href="@{/styles/cssandjs/styles.css}" rel="stylesheet" />
+</head>
+<body>
+    <div th:replace="fragments/header.html :: header"></div>
+    <div id="body">
+        <div class="mb-3" style="height: 40px">
+            <label for="setName" class="form-label">Name</label>
+            <input class="form-control" id="setName">
+        </div>
+        <br>
+        <br>
+        <br>
+
+        <div id="terms">
+            <div class="termContainer">
+                <input placeholder="term" class="form-control term">
+                <input placeholder="definition" class="form-control definition">
+                <br>
+            </div>
+        </div>
+        <button type="button" id="add" class="btn btn-primary">Add</button>
+    </div>
+<script>
+    let body = document.getElementById("body");
+    function collectData() {
+        var name = document.getElementById('setName').value;
+
+        var object = {
+            name: name,
+            terms: []
+        };
+
+        var terms = document.getElementsByClassName('termContainer');
+        for(var i = 0; i < terms.length; i++) {
+            term = terms[i].getElementsByClassName('term')[0].value;
+            definition = terms[i].getElementsByClassName('definition')[0].value;
+            term = {
+                term: term,
+                definition: definition
+            }
+            object.terms.push(term);
+        }
+
+        return object;
+    }
+
+    const addBtn = document.getElementById('add');
+    const termForm = document.getElementsByClassName("termContainer")[0].cloneNode(true);
+
+    let lastPersistedId = undefined;
+
+    addBtn.onclick = function () {
+        var newTermForm = termForm.cloneNode(true);
+        body.insertBefore(newTermForm, addBtn);
+    }
+
+    setInterval(() => {
+        let collectedData = collectData();
+
+        if (collectedData.name.length !== 0) {
+
+            collectedData.lastPersistedId = lastPersistedId;
+
+            fetch("/postSet", {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                method: lastPersistedId === undefined ? "POST" : "PUT",
+                body: JSON.stringify(collectedData),
+            })
+                .then(response => response.text())
+                .then(data => {
+                    lastPersistedId = data;
+                });
+        }
+    }, 2000);
+
+</script>
+</body>
+</html>

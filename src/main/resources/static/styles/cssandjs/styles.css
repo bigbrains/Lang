@@ -1,0 +1,18 @@
+#body {
+    position: fixed;
+    right: 200px;
+    left: 200px;
+}
+
+#headerText {
+    margin-left: 200px;
+}
+
+li#accountHeaderDiv {
+    position: relative;
+    left: 500px;
+}
+
+.loginFormInput {
+    width: 300px;
+}

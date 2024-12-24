@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Library</title>
+    <script th:src="@{/webjars/jquery/5.3.3/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet"
+          th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" />
+    <link th:href="@{/styles/cssandjs/styles.css}" rel="stylesheet" />
+</head>
+<body>
+<div th:replace="fragments/header.html :: header"></div>
+<div id="body">
+    <h1>Log in</h1>
+    <form th:action="@{/login}" method="post">
+        <input type="text" name="username" placeholder="Username" class="loginFormInput form-control">
+        <input type="password" name="password" placeholder="Password" class="loginFormInput form-control">
+        <input type="submit" class="btn btn-success" value="Log in">
+    </form>
+    <a href="/signup"><button class="btn btn-success">Sign up</button></a>
+</div>
+</body>
+</html>

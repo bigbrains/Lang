@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Library</title>
+    <script th:src="@{/webjars/jquery/5.3.3/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet"
+          th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" />
+    <link th:href="@{/styles/cssandjs/styles.css}" rel="stylesheet" />
+</head>
+<body>
+    <div th:replace="fragments/header.html :: header"></div>
+    <div id="body">
+        <h1>Library</h1>
+        <ul class="list-group">
+            <li th:each="set: ${sets}" class="list-group-item"><a th:href="@{/set/{id}(id=${set.id})}" th:text="${set.name}"></a></li>
+        </ul>
+    </div>
+</body>
+</html>
